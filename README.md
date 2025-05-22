@@ -106,27 +106,49 @@ I am building this repo to help out the kanidm server integration with website o
 
 **3. Setting Up System Oauth2 Account:**
 
-   * now you create a group for your Extension and always select idm_admin if you want to fetch the idm_account password from above docker command
-      ```kanidm create group your_group_name```
-   * then you  need to create a client_id and client_secret for your Extension
-      1. for you create oauth account 
-         ```kanidm system oauth2 create your_account_name "your extension name or displayname" https://your_extension_id.chromiumapp.org/```
-      2. now add redirect url for that account
-         ```kanidm system oauth2 add-redirect-url your_account_name https://your_extension_id.chromiumapp.org/```
-      3. update the scope you want like email name openid or any thing else
-         ```kanidm system oauth2 update-scope-map your_account_name your_group_name openid email groups```
-      4. last step for this you run the command to client secret
-         ```kanidm system oauth2 show-basic-secret your_account_name```
-   * now you will get the client secret and client id will be your account and put it to the env file 
+   * Now, create a group for your Extension. If you want to fetch the `idm_account` password from the above Docker command, always select `idm_admin`.
 
-**$. Create Restful API Token Aa Admin:**
-    * Now run below commands to create new token for this first Set
+      ```bash
+      kanidm create group your_group_name
+      ```
+
+   * Then, create a `client_id` and `client_secret` for your Extension:
+
+      1. Create an OAuth account:
+
+         ```bash
+         kanidm system oauth2 create your_account_name "your extension name or displayname" https://your_extension_id.chromiumapp.org/
+         ```
+
+      2. Add a redirect URL for that account:
+
+         ```bash
+         kanidm system oauth2 add-redirect-url your_account_name https://your_extension_id.chromiumapp.org/
+         ```
+
+      3. Update the scope you want, like `email`, `name`, `openid`, or anything else:
+
+         ```bash
+         kanidm system oauth2 update-scope-map your_account_name your_group_name openid email groups
+         ```
+
+      4. As the last step for this, run the command to show client secret:
+
+         ```bash
+         kanidm system oauth2 show-basic-secret your_account_name
+         ```
+
+   * Now you will get the client secret, and the client ID will be your account name. Put both into your environment file.
+
+**4. Create Restful API Token As Admin:**
+
+    * Now, run the commands below to create a new token set. First:
+
+    ```bash
+    kanidm service-account create public_api "Public API Client" idm_admin --name idm_admin
+    kanidm service-account api-token generate --name idm_admin public_api "Public RW Token" --rw
+    kanidm group add-members idm_people_on_boarding public_api --name idm_admin
+    kanidm group add-members idm_group_admins public_api --name idm_admin
     ```
-        kanidm service-account create public_api "Public API Client" idm_admin --name idm_admin
-        kanidm service-account api-token generate --name idm_admin public_api "Public RW Token" --rw
-        kanidm group add-members idm_people_on_boarding public_api --name idm_admin
-        kanidm group add-members idm_group_admins public_api --name idm_admin
-    ```
 
-
-Now you will get the token set in env and also set a client_id and client_secret in the env
+Now you will get the token. Set this and also the `client_id` and `client_secret` in the env.
