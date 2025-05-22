@@ -118,3 +118,15 @@ I am building this repo to help out the kanidm server integration with website o
       4. last step for this you run the command to client secret
          ```kanidm system oauth2 show-basic-secret your_account_name```
    * now you will get the client secret and client id will be your account and put it to the env file 
+
+**$. Create Restful API Token Aa Admin:**
+    * Now run below commands to create new token for this first Set
+    ```
+        kanidm service-account create public_api "Public API Client" idm_admin --name idm_admin
+        kanidm service-account api-token generate --name idm_admin public_api "Public RW Token" --rw
+        kanidm group add-members idm_people_on_boarding public_api --name idm_admin
+        kanidm group add-members idm_group_admins public_api --name idm_admin
+    ```
+
+
+Now you will get the token set in env and also set a client_id and client_secret in the env
